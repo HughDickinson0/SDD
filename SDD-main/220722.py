@@ -4,6 +4,8 @@ import random
 
 pygame.init()
 
+
+
 display_width = 800
 display_height = 600
 #display dimensions
@@ -48,6 +50,7 @@ def road1(roadx,roady):
     gameDisplay.blit(roadImg_1,(roadx,roady))
 
 def isfloat(num):
+    #print(num)
     try:
         float(num)
         return True
@@ -61,6 +64,8 @@ def ground(groundx,groundy):
 def car(carx,cary):
     gameDisplay.blit(carImg,(carx,cary))
 #displaying car
+
+
 
 def carLeft(carx,cary):
     gameDisplay.blit(carLeftImg,(carx -10,cary -10))
@@ -85,7 +90,7 @@ def message_display(text):
     game_loop()
     
 def crash():
-    message_display('CRASHED')
+    message_display('CRASHed')
     
 def game_loop():
     carx = (display_width * 0.45)
@@ -97,7 +102,7 @@ def game_loop():
     roadx = 0
     roady = 0
 
-    
+    timinge = 0
     
     carx_change = 0
 
@@ -116,8 +121,10 @@ def game_loop():
     gameExit = False
 
     while not gameExit:
-
+        
         car(carx,cary)
+
+        
     
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -141,6 +148,8 @@ def game_loop():
 
         ground(groundx,groundy)
 
+        #time.sleep(5)
+
      #   if (clock.tick % 2)==0:
        #     road0(roadx,roady)
        # else:
@@ -151,6 +160,14 @@ def game_loop():
         thing_starty += thing_speed
         
         car(carx,cary)
+
+        timinge += 0.5
+
+        if isfloat(timinge) == False:
+            road0(roadx,roady)
+            
+        if isfloat(timinge) == True:
+            road1(roadx,roady)
         
         things_dodged(dodged)
         
@@ -173,7 +190,8 @@ def game_loop():
         
         pygame.display.update()
         clock.tick(30)
-        print(isfloat(clock.tick))
+        #print(isfloat(clock.tick))
+        #print(clock.tick)
 
 
 game_loop()
