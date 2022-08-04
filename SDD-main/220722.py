@@ -5,7 +5,6 @@ import random
 pygame.init()
 
 
-
 display_width = 800
 display_height = 600
 #display dimensions
@@ -20,7 +19,7 @@ road_width = 460
 
 oil = pygame.image.load('oil_1.png')
 groundImg = pygame.image.load('ground.png')
-cactus = pygame.image.load('cactus_1.png')
+cactusImg = pygame.image.load('cactus_1.png')
 roadImg_0 = pygame.image.load('road_0.png')
 roadImg_1 = pygame.image.load('road_1.png')
 #importing obstacle images and ground and road
@@ -42,6 +41,13 @@ def things_dodged(count):
 def things(thingx, thingy, thingw, thingh, color):
     gameDisplay.blit((oil),[thingx, thingy, thingw, thingh])
 #oil obstacle
+
+#def rocks(rockx, rocky, rockw, rockh):
+#    gameDisplay.blit((
+
+def cactus(cactusx, cactusy, cactusw, cactush, color):
+    gameDisplay.blit((cactusImg),[cactusx, cactusy, cactusw, cactush])
+#cactus obstacle
 
 def road0(roadx,roady):
     gameDisplay.blit(roadImg_0,(roadx,roady))
@@ -85,16 +91,16 @@ def message_display(text):
 
     pygame.display.update()
 
-    time.sleep(2)
+    time.sleep(1)
 
     game_loop()
     
 def crash():
-    message_display('CRASHed')
+    message_display('CRASH')
     
 def game_loop():
     carx = (display_width * 0.45)
-    cary = (display_height * 0.8)
+    cary = (display_height * 0.8)\
 
     groundx = 0
     groundy = 0
@@ -102,15 +108,21 @@ def game_loop():
     roadx = 0
     roady = 0
 
-    timinge = 0
+   # timinge = 0
     
     carx_change = 0
 
-    thing_startx = random.randrange(0, display_width)
-    thing_starty = -1200
+    thing_startx = random.randrange(175, 625)
+    thing_starty = -1000
     thing_speed = 10
     thing_width = 64
     thing_height = 64
+
+    cactus_startx = random.randrange(0, 175)
+    cactus_starty = -500
+    cactus_speed = 10
+    cactus_width = 78
+    cactus_height = 78
 
     thingCount = 1
 
@@ -141,6 +153,7 @@ def game_loop():
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_a or event.key == pygame.K_d:
+
                     carx_change = 0
                     car(carx,cary)
 
@@ -158,27 +171,35 @@ def game_loop():
         # things(thingx, thingy, thingw, thingh, color)
         things(thing_startx, thing_starty, thing_width, thing_height, black)
         thing_starty += thing_speed
+
+        cactus(cactus_startx, cactus_starty, cactus_width, cactus_height, black)
+        cactus_starty += cactus_speed
         
         car(carx,cary)
 
-        timinge += 0.5
+     #   timinge += 0.5
 
-        if isfloat(timinge) == False:
-            road0(roadx,roady)
+       #if isfloat(timinge) == False:
+          #  road0(roadx,roady)
             
-        if isfloat(timinge) == True:
-            road1(roadx,roady)
+      #  if isfloat(timinge) == True:
+          #  road1(roadx,roady)
         
         things_dodged(dodged)
         
         if carx > display_width - car_width or carx < 0:
             crash()
+            
+        if cactus_starty > display_height:
+            cactus_starty = 0 - cactus_height
+            cactus_startx = random.randrange(0, 175)
+            cactus_speed += 0.7
 
         if thing_starty > display_height:
             thing_starty = 0 - thing_height
-            thing_startx = random.randrange(0,display_width)
+            thing_startx = random.randrange(175,625)
             dodged += 1
-            thing_speed += 0.5
+            thing_speed += 0.7
         #
         if cary < thing_starty+thing_height:
             #print('y crossover')
@@ -187,6 +208,8 @@ def game_loop():
               #  print('x crossover')
                 crash()
         ####
+            if carx > cactus_startx and carx < cactus_startx + cactus_width or carx+car_width > cactus_startx and carx + car_width < cactus_startx + cactus_width:
+                crash()
         
         pygame.display.update()
         clock.tick(30)
